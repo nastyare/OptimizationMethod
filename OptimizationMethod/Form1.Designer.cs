@@ -32,8 +32,8 @@ namespace OptimizationMethod
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.calculateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +52,11 @@ namespace OptimizationMethod
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.funBox = new System.Windows.Forms.TextBox();
+            this.maxXBox = new System.Windows.Forms.TextBox();
+            this.maxYBox = new System.Windows.Forms.TextBox();
+            this.funMaxBox = new System.Windows.Forms.TextBox();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
@@ -64,7 +69,7 @@ namespace OptimizationMethod
             this.menuToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(800, 29);
+            this.menuStrip.Size = new System.Drawing.Size(900, 29);
             this.menuStrip.TabIndex = 7;
             this.menuStrip.Text = "menuStrip3";
             this.menuStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip_ItemClicked);
@@ -81,26 +86,26 @@ namespace OptimizationMethod
             // calculateToolStripMenuItem
             // 
             this.calculateToolStripMenuItem.Name = "calculateToolStripMenuItem";
-            this.calculateToolStripMenuItem.Size = new System.Drawing.Size(233, 30);
+            this.calculateToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.calculateToolStripMenuItem.Text = "Рассчитать";
             this.calculateToolStripMenuItem.Click += new System.EventHandler(this.calculateToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(233, 30);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(176, 30);
             this.deleteToolStripMenuItem.Text = "Очистить";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // chart1
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            this.chart1.Location = new System.Drawing.Point(269, 118);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            this.chart1.Location = new System.Drawing.Point(413, 117);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(466, 300);
             this.chart1.TabIndex = 10;
             this.chart1.Text = "chart1";
@@ -132,7 +137,7 @@ namespace OptimizationMethod
             // 
             // equationBox
             // 
-            this.equationBox.Location = new System.Drawing.Point(368, 51);
+            this.equationBox.Location = new System.Drawing.Point(572, 51);
             this.equationBox.Name = "equationBox";
             this.equationBox.Size = new System.Drawing.Size(252, 22);
             this.equationBox.TabIndex = 12;
@@ -188,7 +193,7 @@ namespace OptimizationMethod
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(281, 54);
+            this.label6.Location = new System.Drawing.Point(454, 54);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(70, 16);
             this.label6.TabIndex = 21;
@@ -212,11 +217,53 @@ namespace OptimizationMethod
             this.label9.TabIndex = 24;
             this.label9.Text = "y = ";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(23, 333);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(25, 16);
+            this.label2.TabIndex = 25;
+            this.label2.Text = "F =";
+            // 
+            // funBox
+            // 
+            this.funBox.Location = new System.Drawing.Point(75, 330);
+            this.funBox.Name = "funBox";
+            this.funBox.Size = new System.Drawing.Size(100, 22);
+            this.funBox.TabIndex = 26;
+            // 
+            // maxXBox
+            // 
+            this.maxXBox.Location = new System.Drawing.Point(240, 250);
+            this.maxXBox.Name = "maxXBox";
+            this.maxXBox.Size = new System.Drawing.Size(100, 22);
+            this.maxXBox.TabIndex = 27;
+            // 
+            // maxYBox
+            // 
+            this.maxYBox.Location = new System.Drawing.Point(240, 292);
+            this.maxYBox.Name = "maxYBox";
+            this.maxYBox.Size = new System.Drawing.Size(100, 22);
+            this.maxYBox.TabIndex = 28;
+            // 
+            // funMaxBox
+            // 
+            this.funMaxBox.Location = new System.Drawing.Point(240, 333);
+            this.funMaxBox.Name = "funMaxBox";
+            this.funMaxBox.Size = new System.Drawing.Size(100, 22);
+            this.funMaxBox.TabIndex = 29;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(900, 450);
+            this.Controls.Add(this.funMaxBox);
+            this.Controls.Add(this.maxYBox);
+            this.Controls.Add(this.maxXBox);
+            this.Controls.Add(this.funBox);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label6);
@@ -265,6 +312,11 @@ namespace OptimizationMethod
         private Label label6;
         private Label label8;
         private Label label9;
+        private Label label2;
+        private TextBox funBox;
+        private TextBox maxXBox;
+        private TextBox maxYBox;
+        private TextBox funMaxBox;
     }
 }
 

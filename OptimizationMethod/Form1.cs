@@ -22,84 +22,141 @@ namespace OptimizationMethod
 
         }
 
-        double F(double x, double y, string formula)
-        {
-            org.matheval.Expression expression = new org.matheval.Expression(formula.ToLower());
-            expression.Bind("x", x);
-            expression.Bind("y", y);
-            double value = expression.Eval<double>();
-            return (double)value;
-        }
-
-        static double[] CoordinateDescentOptimization(Func<double, double, double> targetFunction, double initialX, double initialY, double tolerance, int maxIterations = 1000)
-        {
-            double x = initialX;
-            double y = initialY;
-
-            for (int iteration = 0; iteration < maxIterations; iteration++)
-            {
-                double oldX = x;
-                double oldY = y;
-
-                x = OptimizeCoordinate(targetFunction, x, y, "x");
-                y = OptimizeCoordinate(targetFunction, y, x, "y");
-
-                double changeX = Math.Abs(x - oldX);
-                double changeY = Math.Abs(y - oldY);
-
-                if (changeX < tolerance && changeY < tolerance)
-                {
-                    break;
-                }
-            }
-
-            return new double[] { x, y };
-        }
-
-        static double OptimizeCoordinate(Func<double, double, double> targetFunction, double coordinateValue, double otherCoordinate, string coordinateName)
-        {
-            double alpha = 0.01; // шаг обучения
-            double gradient = targetFunction(coordinateValue, otherCoordinate);
-
-            return coordinateValue - alpha * gradient;
-        }
-        private void DisplayChart(Func<double, double, double> targetFunction)
-        {
-            chart1.Series.Clear();
-
-            System.Windows.Forms.DataVisualization.Charting.Series series = new System.Windows.Forms.DataVisualization.Charting.Series();
-            series.ChartType = SeriesChartType.Line;
-
-            for (double x = -10; x <= 10; x += 0.1)
-            {
-                double y = targetFunction(x, 0); // Фиксируем одну переменную, например, y = 0
-                series.Points.AddXY(x, y);
-            }
-
-            chart1.Series.Add(series);
-            chart1.Invalidate();
-        }
-
-        private void maximumToolStripMenuItem_Click(object sender, EventArgs e)
+        double F(double x)
         {
             string formula = equationBox.Text;
-            Func<double, double, double> targetFunction = (x, y) => F(x, y, formula);
-
-            double initialX = Convert.ToDouble(textBox1.Text);
-            double initialY = Convert.ToDouble(textBox2.Text);
-            double tolerance = Convert.ToDouble(textBox3.Text);
-
-           
-            double[] result = CoordinateDescentOptimization(targetFunction, initialX, initialY, tolerance);
-            XBox.Text = $"{result[0]}";
-            YBox.Text = $"{result[1]}";
-            MessageBox.Show($"{targetFunction(result[0], result[1])}");
-            DisplayChart(targetFunction);
+            org.matheval.Expression expression = new org.matheval.Expression(formula.ToLower());
+            expression.Bind("x", x);
+            double value = expression.Eval<double>();
+            return value;
         }
+
+        double antiF(double x)
+        {
+            return -F(x);
+        }
+
+        void DescentMethodRoot(double a, double b, double epsilon)
+        {
+
+            double x = (a + b) / 2; // Начальное приближение
+
+            while (Math.Abs(F(x)) > epsilon)
+            {
+                // Обновление координаты x по очереди
+                for (int i = 0; i < 100; i++) // Максимальное количество итераций
+                {
+                    double prevX = x;
+                    x = a + (F(b) * (b - a)) / (F(b) - F(a));
+                    if (Math.Abs(F(x)) <= epsilon || Math.Abs(x - prevX) <= epsilon)
+                        break;
+                    if (F(x) * F(a) < 0)
+                        b = x;
+                    else
+                        a = x;
+                }
+                if (F(x) * F(a) < 0)
+                    b = x;
+                else
+                    a = x;
+            }
+
+
+            funBox.Text = x.ToString();
+
+        }
+        public double CoordinateDescentMin(double interval1, double interval2, int accuracy)
+        {
+            double a = interval1, b = interval2;
+            double x = (a + b) / 2; // Инициализация начального значения x
+            double delta = 1 / Math.Pow(10, accuracy); // Вычисление дельты по точности n
+
+            while (b - a > delta) // Условие остановки
+            {
+                if (F(a) > F(b))
+                    a = x; // Если значение функции в точке a больше, обновляем начальную границу
+                else
+                    b = x; // Иначе обновляем конечную границу
+
+                x = (a + b) / 2; // Вычисление нового значения x
+            }
+
+            return Math.Round(x, accuracy); // Возвращаем значение x с заданной точностью n
+        }
+        public double AntiCoordinateDescent(double interval1, double interval2, int accuracy)
+        {
+            double a = interval1, b = interval2;
+            double x = (a + b) / 2; // Инициализация начального значения x
+            double delta = 1 / Math.Pow(10, accuracy); // Вычисление дельты по точности n
+
+            while (b - a > delta) // Условие остановки
+            {
+                if (-F(a) > -F(b))
+                    a = x; // Если значение функции в точке a больше, обновляем начальную границу
+                else
+                    b = x; // Иначе обновляем конечную границу
+
+                x = (a + b) / 2; // Вычисление нового значения x
+            }
+
+            return Math.Round(x, accuracy); // Возвращаем значение x с заданной точностью n
+        }
+
+        private void calculateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            double a, b, Xi, n;
+            if (!double.TryParse(textBox1.Text, out a) || !double.TryParse(textBox2.Text, out b) || !double.TryParse(textBox3.Text, out Xi))
+            {
+                throw new ArgumentException("Некорректные значения входных данных");
+            }
+            if (a >= b)
+            {
+                throw new ArgumentException("Некорректные границы интервала");
+            }
+            this.chart1.Series[0].Points.Clear();
+            double x = a;
+            double y;
+            while (x <= b)
+            {
+                y = F(x);
+                this.chart1.Series[0].Points.AddXY(x, y);
+                x += 0.1;
+            }
+            DescentMethodRoot(a, b, Xi);
+
+            double resultMin = CoordinateDescentMin(a, b, (int)-Math.Log10(Xi));
+            double resultMax = AntiCoordinateDescent(a, b, (int)-Math.Log10(Xi));
+            XBox.Text = resultMin.ToString();
+            YBox.Text = resultMax.ToString();
+            if (resultMin == a || resultMin == b)
+            {
+                throw new ArgumentException("Точки минимум нет на данном интервале");
+            }
+            else
+            {
+                XBox.Text = resultMin.ToString();
+            }
+            if (resultMax == a || resultMax == b)
+            {
+                throw new ArgumentException("Точки максимум нет на данном интервале");
+            }
+            else
+            {
+                XBox.Text = resultMax.ToString();
+            }
+        }
+  
+        //2*x^2+y^2-x*y
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            equationBox.Clear();
+            XBox.Clear();
+            YBox.Clear();
+            chart1.Series.Clear();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
