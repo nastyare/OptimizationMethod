@@ -93,6 +93,7 @@ namespace OptimizationMethod
             double[] result = CoordinateDescentOptimization(targetFunction, initialX, initialY, tolerance);
             XBox.Text = $"{result[0]}";
             YBox.Text = $"{result[1]}";
+            MessageBox.Show($"{targetFunction(result[0], result[1])}");
             DisplayChart(targetFunction);
         }
 
